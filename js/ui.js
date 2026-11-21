@@ -95,19 +95,38 @@
   var toastQ = [], toastBusy = false;
   U.toast = function (label, title, sub) {
     toastQ.push([label, title, sub]);
-    if (!toastBusy) nextToast();
+    // Wait a moment so banners that arrive together are folded into one.
+    if (!toastBusy) { toastBusy = true; setTimeout(nextToast, 60); }
   };
+  // Banners: tap (or swipe up) to dismiss. A long queue is folded into one summary banner.
   function nextToast() {
     var t = toastQ.shift();
     if (!t) { toastBusy = false; return; }
+    if (toastQ.length >= 2) {
+      var more = toastQ.length;
+      toastQ = [];
+      t = [t[0], t[1], t[2] + ' · plus ' + more + ' more (see the More tab)'];
+    }
     toastBusy = true;
-    var d = document.createElement('div');
+    var d = document.createElement('button');
+    d.type = 'button';
     d.className = 'toast';
-    d.innerHTML = '<span class="lbl">' + t[0] + '</span><b>' + t[1] + '</b><span class="d">' + t[2] + '</span>';
+    d.setAttribute('aria-label', 'Dismiss: ' + t[1]);
+    d.innerHTML = '<span class="lbl">' + t[0] + '</span><b>' + t[1] + '</b><span class="d">' + t[2] + '</span><i class="x" aria-hidden="true"></i>';
     document.body.appendChild(d);
+    var gone = false, timer, y0 = null;
+    function dismiss() {
+      if (gone) return;
+      gone = true;
+      clearTimeout(timer);
+      d.classList.remove('show');
+      setTimeout(function () { d.remove(); nextToast(); }, 250);
+    }
+    d.addEventListener('click', dismiss);
+    d.addEventListener('touchstart', function (e) { y0 = e.touches[0].clientY; }, { passive: true });
+    d.addEventListener('touchmove', function (e) { if (y0 !== null && e.touches[0].clientY - y0 < -18) dismiss(); }, { passive: true });
     requestAnimationFrame(function () { requestAnimationFrame(function () { d.classList.add('show'); }); });
-    setTimeout(function () { d.classList.remove('show'); }, 2600);
-    setTimeout(function () { d.remove(); nextToast(); }, 3000);
+    timer = setTimeout(dismiss, 2400);
   }
 
   U.pop = function (anchor, text) {

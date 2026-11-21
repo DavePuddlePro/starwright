@@ -4,7 +4,7 @@
  * fetches any newer version in the background, which is used the next time you open it.
  * Bump VERSION whenever you publish, so phones drop the old copy.
  */
-var VERSION = 'starwright-0.7.0';
+var VERSION = 'starwright-0.7.1';
 var APP_FILES = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css',
   'js/config.js', 'js/format.js', 'js/economy.js', 'js/progress.js', 'js/moon.js', 'js/mars.js', 'js/kestrel.js',

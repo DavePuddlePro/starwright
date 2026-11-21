@@ -29,8 +29,10 @@
   --world-h: min(52vh, 440px);
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; margin: 0; background: #050910; color: var(--fg); }
-body { font: 15px/1.4 var(--f-body); overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-font-smoothing: antialiased; }
+/* Lock the page itself in place: no rubber-band scrolling, no zooming. Only the sheet's list scrolls. */
+html, body { position: fixed; inset: 0; width: 100%; height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; background: #050910; color: var(--fg); }
+body { font: 15px/1.4 var(--f-body); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
+* { touch-action: manipulation; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .tnum { font-variant-numeric: tabular-nums; }
@@ -84,7 +86,7 @@ button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .drawer { position: absolute; left: 0; right: 0; bottom: 0; top: calc(var(--world-h) + var(--safe-t) - 44px); z-index: 2; display: flex; flex-direction: column;
   border-radius: 30px 30px 0 0; background: linear-gradient(180deg, #111c33 0, var(--sheet) 90px); box-shadow: 0 -18px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08); }
 .grab { width: 40px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.22); margin: 9px auto 2px; flex: none; }
-.panel { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 4px 14px calc(110px + var(--safe-b)); display: flex; flex-direction: column; gap: 10px; }
+.panel { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; padding: 4px 14px calc(110px + var(--safe-b)); display: flex; flex-direction: column; gap: 10px; }
 .panel > * { flex-shrink: 0; }
 .sh-head, .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 4px 4px; }
 .sh-head h2, .panel-head h2 { font: 600 22px/1.1 var(--f-display); letter-spacing: -.01em; margin: 0; }
@@ -196,9 +198,12 @@ button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .chips span { display: inline-flex; align-items: center; gap: 5px; font: 700 11px/1 var(--f-body); color: var(--fg-2); background: rgba(255,255,255,.06); border-radius: 999px; padding: 7px 11px 7px 8px; }
 .chips .ic { width: 12px; height: 12px; color: var(--good); }
 
-.toast { position: fixed; z-index: 35; left: 50%; top: calc(12px + var(--safe-t)); transform: translate(-50%, -16px); opacity: 0; transition: opacity .3s, transform .3s; width: min(92vw, 360px); display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; border-radius: 20px;
+.toast { position: fixed; z-index: 35; left: 50%; top: calc(12px + var(--safe-t)); transform: translate(-50%, -16px); opacity: 0; transition: opacity .25s, transform .25s; width: min(92vw, 360px); display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 4px; padding: 12px 40px 12px 16px; border-radius: 20px; color: var(--fg); cursor: pointer;
   background: rgba(18,30,52,.88); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(255,138,61,.5); box-shadow: 0 0 24px rgba(255,138,61,.18), 0 14px 40px rgba(0,0,0,.5); pointer-events: none; }
-.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.toast .x { position: absolute; top: 12px; right: 12px; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.1); }
+.toast .x::before, .toast .x::after { content: ""; position: absolute; left: 6px; top: 10.25px; width: 10px; height: 1.5px; border-radius: 1px; background: var(--fg-2); transform: rotate(45deg); }
+.toast .x::after { transform: rotate(-45deg); }
 .toast .lbl { margin: 0; color: var(--orange-soft); }
 .toast b { font: 600 16px/1.25 var(--f-display); }
 .toast .d { color: var(--fg-2); font-size: 12.5px; }

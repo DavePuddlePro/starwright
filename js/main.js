@@ -438,6 +438,8 @@
     SW.audio.setEnabled('sound', G.s.settings.sound);
     SW.audio.setEnabled('music', G.s.settings.music);
     document.addEventListener('pointerdown', function () { SW.audio.unlock(); }, true);
+    // iPhone ignores "no zoom" in the page settings, so block pinch-zoom gestures directly.
+    ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) { document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false }); });
     last = now;
     if (loaded) {
       var away = (now - G.s.lastSeen) / 1000;
