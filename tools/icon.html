@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Starwright icon</title>
+<style>body { margin: 0; background: #222; display: flex; gap: 20px; padding: 20px; align-items: flex-start; } img, canvas { border-radius: 22%; }</style>
+</head><body>
+<div id="out"></div>
+<script src="../js/art2.js"></script>
+<script>
+// Builds the app icon from the game's own rocket art, as one self-contained SVG.
+function iconSvg() {
+  var defs = SW.art2.defs.slice(SW.art2.defs.indexOf('<defs>') + 6, SW.art2.defs.indexOf('</defs>'));
+  var s = '<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><defs>' + defs +
+    '<linearGradient id="ic-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#060c1c"/><stop offset=".42" stop-color="#16315c"/><stop offset=".7" stop-color="#4a77b0"/><stop offset=".86" stop-color="#f3ad84"/><stop offset="1" stop-color="#ff8a4a"/></linearGradient>' +
+    '<radialGradient id="ic-halo" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd2a8" stop-opacity=".55"/><stop offset="1" stop-color="#ffd2a8" stop-opacity="0"/></radialGradient>' +
+    '<linearGradient id="ic-trail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4dc"/><stop offset=".25" stop-color="#ffb066"/><stop offset=".7" stop-color="#ff7a29" stop-opacity=".55"/><stop offset="1" stop-color="#ff7a29" stop-opacity="0"/></linearGradient>' +
+    '</defs>';
+  s += '<rect width="1024" height="1024" fill="url(#ic-sky)"/>';
+  var seed = 7; function r() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  s += '<g fill="#fff">'; for (var i = 0; i < 70; i++) { var y = r() * 520; s += '<circle cx="' + (r() * 1024).toFixed(0) + '" cy="' + y.toFixed(0) + '" r="' + (r() * 2.6 + .8).toFixed(1) + '" opacity="' + ((1 - y / 600) * (r() * .6 + .35)).toFixed(2) + '"/>'; } s += '</g>';
+  // moon
+  s += '<circle cx="790" cy="230" r="120" fill="url(#ic-halo)"/><circle cx="790" cy="230" r="46" fill="#f3f6fb"/><circle cx="774" cy="218" r="9" fill="#c9d3e2"/><circle cx="804" cy="246" r="6" fill="#d3dbe7"/>';
+  // hills
+  s += '<path d="M0 880 L140 830 L260 860 L420 800 L560 850 L720 790 L860 840 L1024 810 V1024 H0 Z" fill="#2d4c7c" opacity=".9"/>';
+  s += '<path d="M0 930 C200 890 380 915 560 895 C740 875 880 905 1024 890 V1024 H0 Z" fill="#132440"/>';
+  // exhaust trail + glow under the rocket
+  s += '<ellipse cx="512" cy="860" rx="210" ry="120" fill="url(#ic-halo)"/>';
+  s += '<path d="M455 790 Q512 1100 569 790 Z" fill="url(#ic-trail)"/>';
+  s += '<path d="M482 790 Q512 960 542 790 Z" fill="#fff4dc" opacity=".9"/>';
+  // the rocket: art2 box is 50 x 200; scale 3.5 around the centre
+  s += '<g transform="translate(424.5 96) scale(3.5)">' + SW.art2.rocket(0, 0, 4).replace(/<text[^>]*>[^<]*<\/text>/g, '') + '</g>';
+  s += '</svg>';
+  return s;
+}
+var svgUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg());
+var img = new Image();
+var ready = new Promise(function (res) { img.onload = res; });
+img.src = svgUrl;
+// Render at a size; returns a PNG data URL.
+window.renderIcon = async function (size) {
+  await ready;
+  var c = document.createElement('canvas'); c.width = c.height = size;
+  var g = c.getContext('2d'); g.imageSmoothingQuality = 'high';
+  g.drawImage(img, 0, 0, size, size);
+  return c.toDataURL('image/png');
+};
+ready.then(function () { var p = document.createElement('img'); p.src = svgUrl; p.width = 300; document.getElementById('out').appendChild(p); });
+</script>
+</body></html>

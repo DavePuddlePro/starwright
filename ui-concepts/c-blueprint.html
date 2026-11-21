@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Starwright · Concept C · Blueprint</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Concept C — Blueprint: a daylight engineering drawing. Pale blue paper with a fine grid, navy ink,
+   the yard drawn as a technical illustration with callouts. Orange is used only for things you can press. */
+:root {
+  --paper: #e8f0f9; --sheet: #ffffff; --grid: rgba(30,70,130,.07); --line: rgba(14,39,71,.13); --line-2: rgba(14,39,71,.28);
+  --ink: #0d2646; --ink-2: #34507a; --muted: #6a809f; --blue: #3c7bd0; --soft: #d7e6f7; --orange: #ff7a29; --orange-d: #e2600f;
+  --disp: "Archivo", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: #dfe9f5; color: var(--ink); font: 15px/1.35 var(--disp); -webkit-font-smoothing: antialiased; }
+.screen { width: 390px; height: 844px; position: relative; overflow: hidden; margin: 0 auto;
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(rgba(30,70,130,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(30,70,130,.035) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px; background-position: -1px -1px; }
+.tnum { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--mono); }
+.sb { height: 47px; display: flex; justify-content: space-between; align-items: center; padding: 14px 28px 0 34px; font: 650 16px/1 var(--disp); }
+.titleblock { display: flex; justify-content: space-between; padding: 12px 20px 0; font: 600 10.5px/1 var(--mono); letter-spacing: .08em; color: var(--muted); }
+.head { display: flex; justify-content: space-between; align-items: flex-end; padding: 10px 20px 14px; }
+.bal .l { font: 600 11px/1 var(--mono); letter-spacing: .1em; color: var(--ink-2); }
+.bal .v { display: flex; align-items: flex-start; gap: 6px; margin-top: 6px; }
+.bal .v b { font: 300 54px/0.9 var(--disp); font-stretch: 125%; letter-spacing: -.02em; }
+.bal .v span { font: 700 15px/1 var(--disp); font-stretch: 125%; margin-top: 4px; color: var(--blue); }
+.bal .r { margin-top: 10px; font: 600 12.5px/1 var(--mono); color: var(--ink-2); display: flex; align-items: center; gap: 8px; }
+.bal .r i { width: 22px; height: 1.5px; background: var(--ink-2); display: inline-block; }
+.stamp { border: 1.5px solid var(--orange); border-radius: 10px; padding: 9px 11px; text-align: right; background: rgba(255,122,41,.07); }
+.stamp b { display: block; font: 800 18px/1 var(--disp); font-stretch: 112%; color: var(--orange-d); }
+.stamp span { display: block; margin-top: 5px; font: 600 11px/1 var(--mono); color: var(--orange-d); letter-spacing: .04em; }
+.stamp small { display: block; margin-top: 5px; font: 600 9.5px/1 var(--mono); color: var(--muted); letter-spacing: .1em; }
+/* Drawing */
+.drawing { margin: 0 14px; background: var(--sheet); border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 0 rgba(14,39,71,.04), 0 12px 30px rgba(30,70,130,.08); }
+.drawing svg { display: block; width: 100%; height: auto; }
+.goal { display: flex; align-items: center; gap: 12px; padding: 10px 14px 12px; border-top: 1px solid var(--line); }
+.goal .t { font: 700 13px/1 var(--disp); white-space: nowrap; }
+.goal .t span { color: var(--muted); font-weight: 600; }
+.goal .bar { flex: 1; height: 8px; border: 1.5px solid var(--ink); border-radius: 2px; padding: 1px; }
+.goal .bar i { display: block; height: 100%; width: 62%; background: repeating-linear-gradient(135deg, var(--orange) 0 4px, #ff9b5c 4px 7px); }
+.goal .p { font: 600 13px/1 var(--mono); }
+/* List */
+.sec { display: flex; justify-content: space-between; align-items: baseline; padding: 16px 20px 8px; }
+.sec h2 { font: 800 13px/1 var(--disp); font-stretch: 125%; letter-spacing: .06em; text-transform: uppercase; }
+.sec span { font: 600 11px/1 var(--mono); color: var(--muted); letter-spacing: .04em; }
+.table { margin: 0 14px; background: var(--sheet); border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; }
+.row { position: relative; display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center; padding: 13px 12px 13px 12px; border-bottom: 1px solid var(--line); }
+.row:last-child { border-bottom: 0; }
+.row.best { background: linear-gradient(90deg, rgba(255,122,41,.09), rgba(255,122,41,0) 70%); }
+.row.best::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--orange); }
+.idx { font: 600 12px/1 var(--mono); color: var(--muted); }
+.row.best .idx { color: var(--orange-d); }
+.nm { display: flex; align-items: center; gap: 8px; font: 700 16px/1.1 var(--disp); }
+.nm em { font: 600 12px/1 var(--mono); font-style: normal; color: var(--ink-2); background: var(--soft); padding: 3px 6px; border-radius: 5px; }
+.spec .bv { font: 700 10px/1 var(--mono); letter-spacing: .08em; color: var(--orange-d); }
+.row > div { min-width: 0; }
+.spec { margin-top: 6px; display: flex; gap: 8px; white-space: nowrap; overflow: hidden; font: 600 11.5px/1 var(--mono); color: var(--muted); }
+.spec b { color: var(--ink); font-weight: 600; }
+.ms { margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+.ms .tk { display: flex; gap: 2.5px; }
+.ms .tk i { width: 7px; height: 7px; border: 1.3px solid var(--line-2); border-radius: 2px; }
+.ms .tk i.f { background: var(--ink); border-color: var(--ink); }
+.ms .tk i.n { border-color: var(--orange); background: rgba(255,122,41,.18); }
+.ms span { font: 600 11px/1 var(--mono); color: var(--ink-2); white-space: nowrap; }
+.ms span.hot { color: var(--orange-d); }
+.buy { width: 98px; height: 56px; border-radius: 10px; border: 1.5px solid var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: #fff; }
+.buy b { font: 750 15px/1 var(--disp); font-stretch: 110%; }
+.buy small { font: 600 11px/1 var(--mono); color: var(--ink-2); }
+.row.best .buy { background: var(--orange); border-color: var(--orange); color: #fff; box-shadow: 0 6px 16px rgba(255,122,41,.35); }
+.row.best .buy small { color: rgba(255,255,255,.9); }
+.row.off .buy { border-style: dashed; border-color: var(--line-2); color: var(--muted); }
+/* Bottom */
+.amt { position: absolute; left: 14px; right: 14px; bottom: 112px; display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; background: var(--sheet); border: 1px solid var(--line-2); border-radius: 14px; box-shadow: 0 -8px 24px rgba(30,70,130,.08); }
+.amt .l { font: 600 11px/1 var(--mono); color: var(--muted); letter-spacing: .08em; }
+.amt .seg { flex: 1; display: flex; gap: 4px; }
+.amt .seg span { flex: 1; text-align: center; padding: 9px 0; border-radius: 8px; font: 700 13px/1 var(--disp); color: var(--ink-2); border: 1px solid transparent; }
+.amt .seg span.on { background: var(--ink); color: #fff; }
+.tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 98px; padding: 8px 10px 34px; display: flex; justify-content: space-around; background: var(--sheet); border-top: 1px solid var(--line-2); }
+.tabs span { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 64px; font: 700 10.5px/1 var(--disp); color: var(--muted); position: relative; padding-top: 6px; }
+.tabs span svg { width: 23px; height: 23px; }
+.tabs span.on { color: var(--ink); }
+.tabs span.on svg { color: var(--orange); }
+.tabs span.on::before { content: ""; position: absolute; top: -9px; left: 16px; right: 16px; height: 3px; border-radius: 0 0 3px 3px; background: var(--orange); }
+.tabs .dot { position: absolute; top: 3px; right: 16px; width: 7px; height: 7px; border-radius: 50%; background: var(--orange); }
+.home { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ink); }
+.fadeout { position: absolute; left: 0; right: 0; bottom: 98px; height: 90px; background: linear-gradient(180deg, rgba(232,240,249,0), var(--paper) 70%); }
+</style></head>
+<body>
+<div class="screen">
+  <div class="sb"><span>9:41</span><svg width="70" height="13" viewBox="0 0 70 13"><g fill="#0d2646"><rect x="0" y="8" width="3" height="5" rx="1"/><rect x="5" y="5.5" width="3" height="7.5" rx="1"/><rect x="10" y="3" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1"/><path d="M29 3.5a9 9 0 0 1 12 0l-1.4 1.5a7 7 0 0 0-9.2 0zM31.6 6.4a5 5 0 0 1 6.8 0L37 7.9a3 3 0 0 0-4 0zM35 11.5l-1.6-1.7a2.3 2.3 0 0 1 3.2 0z"/><rect x="45" y="0.5" width="22" height="12" rx="3.5" fill="none" stroke="#0d2646" opacity=".45"/><rect x="47" y="2.5" width="16" height="8" rx="2"/><rect x="68" y="4.5" width="1.6" height="4" rx=".8" opacity=".45"/></g></svg></div>
+  <div class="titleblock"><span>STARWRIGHT · LAUNCH YARD 01</span><span>SHEET 1 / 5</span></div>
+  <div class="head">
+    <div class="bal"><div class="l">CREDITS</div><div class="v tnum"><b>48.21</b><span>M</span></div><div class="r tnum"><i></i>+312.4 K / SEC</div></div>
+    <div class="stamp"><b>×2</b><span class="tnum">1:12:40 LEFT</span><small>OVERDRIVE</small></div>
+  </div>
+  <div class="drawing"><div id="dwg"></div>
+    <div class="goal"><span class="t">Rocket Mk I <span>· Fuel Tank</span></span><span class="bar"><i></i></span><span class="p tnum">62%</span></div>
+  </div>
+  <div class="sec"><h2>Factories</h2><span>8 TYPES · 400 UNITS</span></div>
+  <div class="table" id="tbl"></div>
+  <div class="fadeout"></div>
+  <div class="amt"><span class="l">BUY</span><div class="seg"><span>×1</span><span class="on">×10</span><span>×100</span><span>Max</span></div></div>
+  <div class="tabs" id="tabs"></div>
+  <div class="home"></div>
+</div>
+<script src="../js/art.js"></script>
+<script>
+document.body.insertAdjacentHTML('afterbegin', SW.art.defs);
+// ---- Technical drawing of the yard ----
+(function () {
+  var ink = '#0d2646', ink2 = '#34507a', soft = '#d7e6f7', o = '#ff7a29';
+  var s = '<svg viewBox="0 0 362 176">';
+  s += '<defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V5" stroke="' + ink2 + '" stroke-width="1" opacity=".35"/></pattern></defs>';
+  s += '<rect width="362" height="176" fill="#fbfdff"/>';
+  // ground line + dimension baseline
+  s += '<path d="M10 142 H352" stroke="' + ink + '" stroke-width="1.4"/>';
+  s += '<path d="M10 146 H352" stroke="' + ink + '" stroke-width=".6" stroke-dasharray="2 3" opacity=".5"/>';
+  // buildings
+  var B = [[16, 30, 26], [50, 34, 40], [88, 26, 30], [118, 42, 52], [164, 30, 66], [198, 36, 38]];
+  B.forEach(function (b, k) {
+    var x = b[0], w = b[1], h = b[2], top = 142 - h;
+    s += '<rect x="' + x + '" y="' + top + '" width="' + w + '" height="' + h + '" fill="' + (k === 5 ? 'url(#hatch)' : soft) + '" stroke="' + ink + '" stroke-width="1.2"' + (k === 5 ? ' stroke-dasharray="3 2"' : '') + '/>';
+    if (k !== 5) for (var yy = top + 6; yy < 136; yy += 8) for (var xx = x + 4; xx < x + w - 5; xx += 7) s += '<rect x="' + xx + '" y="' + yy + '" width="3.5" height="3" fill="' + ((xx + yy) % 3 ? ink : o) + '" opacity="' + ((xx + yy) % 3 ? .55 : .9) + '"/>';
+    if (k === 1 || k === 3) s += '<rect x="' + (x + w - 10) + '" y="' + (top - 16) + '" width="6" height="16" fill="' + soft + '" stroke="' + ink + '" stroke-width="1.2"/>';
+  });
+  s += '<path d="M166 76 V62" stroke="' + ink + '" stroke-width="1.2"/><circle cx="166" cy="60" r="2.4" fill="' + o + '"/>';
+  // gantry
+  s += '<g stroke="' + ink + '" stroke-width="1.1" fill="none"><path d="M262 30 V142 M272 30 V142"/>';
+  for (var gy = 34; gy < 140; gy += 10) s += '<path d="M262 ' + gy + ' L272 ' + (gy + 5) + ' L262 ' + (gy + 10) + '"/>';
+  s += '<path d="M272 52 H282 M272 98 H282"/></g>';
+  // rocket: outline + built sections filled
+  var rx = 286, rw = 40;
+  s += '<path d="M306 20 C318 34 322 52 322 72 L322 134 L290 134 L290 72 C290 52 294 34 306 20 Z" fill="#fff" stroke="' + ink + '" stroke-width="1.3" stroke-dasharray="4 3"/>';
+  s += '<clipPath id="rkc"><rect x="280" y="98" width="60" height="40"/></clipPath>';
+  s += '<path clip-path="url(#rkc)" d="M306 20 C318 34 322 52 322 72 L322 134 L290 134 L290 72 C290 52 294 34 306 20 Z" fill="' + soft + '" stroke="' + ink + '" stroke-width="1.3"/>';
+  s += '<path d="M290 116 H322" stroke="' + o + '" stroke-width="2"/><path d="M290 98 H322" stroke="' + ink + '" stroke-width="1"/>';
+  s += '<path d="M290 118 L278 138 L290 134 M322 118 L334 138 L322 134" fill="' + soft + '" stroke="' + ink + '" stroke-width="1.2"/>';
+  s += '<circle cx="306" cy="64" r="5" fill="#fff" stroke="' + ink + '" stroke-width="1.2"/>';
+  // dimension line + callouts
+  s += '<g stroke="' + ink2 + '" stroke-width=".8" fill="none"><path d="M340 20 V134 M336 20 H344 M336 134 H344 M336 98 H344"/></g>';
+  s += '<g font-family="IBM Plex Mono" font-size="7.5" font-weight="600" fill="' + ink2 + '" letter-spacing=".5">';
+  s += '<path d="M318 108 L346 108" stroke="' + o + '" stroke-width=".8"/><text x="300" y="160" text-anchor="middle">MK I</text>';
+  s += '<path d="M232 104 L256 104" stroke="' + o + '" stroke-width="0"/>';
+  s += '<path d="M216 112 L230 64 H250" stroke="' + ink2 + '" stroke-width=".8" fill="none"/><text x="184" y="60">06 · NOT BUILT</text>';
+  s += '<path d="M141 90 L120 24 H96" stroke="' + ink2 + '" stroke-width=".8" fill="none"/><circle cx="141" cy="90" r="2" fill="' + o + '"/><text x="16" y="21">7 / 8 FACTORIES ONLINE</text>';
+  s += '<text x="10" y="160">YARD PLAN · SCALE 1:400</text><text x="352" y="160" text-anchor="end">N ↑</text>';
+  s += '</g>';
+  // Ori figure (small)
+  s += '<use href="#sym-ori" x="238" y="122" width="14" height="20"/>';
+  s += '</svg>';
+  document.getElementById('dwg').innerHTML = s;
+})();
+var F = [
+  { n: 'Bolt Press', c: 147, share: 3, cyc: '0.4s', ms: 8, msText: '×2 IN 3', hot: true, gain: '+1.20K/s', cost: '41.3K' },
+  { n: 'Wire Mill', c: 86, share: 6, cyc: '1.0s', ms: 7, msText: '×2 IN 14', gain: '+4.90K/s', cost: '512K' },
+  { n: 'Fuel Refinery', c: 65, share: 21, cyc: '2.3s', ms: 3, msText: '×2 IN 35', gain: '+18.6K/s', cost: '1.14M', best: true },
+  { n: 'Hull Foundry', c: 49, share: 38, cyc: '5.0s', ms: 9, msText: '×2 IN 1', hot: true, gain: '+41.0K/s', cost: '52.8M', off: true },
+  { n: 'Engine Works', c: 12, share: 32, cyc: '11s', ms: 1, msText: '×2 IN 13', gain: '+66.2K/s', cost: '96.4M', off: true }
+];
+document.getElementById('tbl').innerHTML = F.map(function (f, i) {
+  var tk = ''; for (var k = 0; k < 10; k++) tk += '<i class="' + (k < f.ms ? 'f' : '') + (k === 9 ? ' n' : '') + '"></i>';
+  return '<div class="row' + (f.best ? ' best' : '') + (f.off ? ' off' : '') + '"><span class="idx">0' + (i + 1) + '</span>' +
+    '<div><div class="nm">' + f.n + ' <em class="tnum">×' + f.c + '</em></div>' +
+    '<div class="spec tnum">' + (f.best ? '<span class="bv">BEST VALUE</span>' : '') + '<span><b>' + f.share + '%</b> OF INCOME</span>' + (f.best ? '' : '<span>· <b>' + f.cyc + '</b></span>') + '</div>' +
+    '<div class="ms"><span class="tk">' + tk + '</span><span class="' + (f.hot ? 'hot' : '') + '">' + f.msText + '</span></div></div>' +
+    '<div class="buy tnum"><b>' + f.cost + '</b><small>' + f.gain + '</small></div></div>';
+}).join('');
+var T = [['factory', 'Factories', 1], ['up', 'Upgrades', 0, 1], ['rocket', 'Rocket'], ['station', 'Station'], ['more', 'More', 0, 1]];
+document.getElementById('tabs').innerHTML = T.map(function (t) { return '<span class="' + (t[2] ? 'on' : '') + '">' + (t[3] ? '<i class="dot"></i>' : '') + '<svg><use href="#i-' + t[0] + '"/></svg>' + t[1] + '</span>'; }).join('');
+</script>
+</body></html>

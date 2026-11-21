@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starwright · Art sheet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Manrope:wght@600;700&family=Unbounded:wght@500&display=swap">
+<style>
+:root { --bg: #0a1222; --fg: #eef3fb; --muted: #8494ae; --line: rgba(170,200,240,.12); }
+* { box-sizing: border-box; margin: 0; }
+body { background: radial-gradient(900px 500px at 70% -10%, #18325a, transparent 60%), var(--bg); color: var(--fg); font: 14px/1.4 "Manrope", sans-serif; }
+.wrap { width: 1000px; margin: 0 auto; padding: 24px 30px 24px; display: flex; flex-direction: column; gap: 16px; }
+h1 { font: 600 24px/1 "Outfit", sans-serif; }
+h1 span { color: var(--muted); font-weight: 400; }
+h2 { font: 700 11px/1 "Manrope", sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.panel { border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(180deg, rgba(23,37,63,.7), rgba(13,22,40,.7)); padding: 18px 20px; }
+.rockets { display: flex; align-items: flex-end; justify-content: space-between; }
+.rk { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.rk svg { display: block; }
+.cap { font: 600 12px/1 "Manrope", sans-serif; color: var(--muted); text-align: center; }
+.cap b { color: var(--fg); font-weight: 700; display: block; margin-bottom: 4px; font-size: 13px; }
+.facs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.fc { border-radius: 16px; background: linear-gradient(180deg, #213e6a 0%, #3d6aa3 60%, #f0aa82 100%); overflow: hidden; display: flex; flex-direction: column; }
+.fc svg { display: block; width: 100%; height: 128px; }
+.fc .cap { padding: 10px 0 11px; background: #0f1a2f; }
+.icons { display: flex; justify-content: space-between; }
+.ic { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.rt { position: relative; width: 72px; height: 72px; }
+.rt svg.rg { position: absolute; inset: 0; }
+.rt .tile { position: absolute; left: 10px; top: 10px; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(160deg, #2e5a92, #1a3459); box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
+.rt.best .tile { background: linear-gradient(160deg, #ffad6e, #ff7a29); }
+.row2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; }
+</style></head>
+<body>
+<div class="wrap">
+  <h1>Starwright art sheet <span>· drawn in code, no image files</span></h1>
+  <div class="row2">
+    <div class="panel"><h2>Rocket Mk I · built section by section</h2><div class="rockets" id="rockets"></div></div>
+    <div class="panel"><h2>Factory icons · with production rings</h2><div class="icons" id="icons" style="flex-wrap:wrap;row-gap:14px"></div></div>
+  </div>
+  <div class="panel"><h2>Factories · lit when owned, blueprint outline when not</h2><div class="facs" id="facs"></div></div>
+</div>
+<script src="../js/art.js"></script>
+<script src="../js/art2.js"></script>
+<script>
+document.body.insertAdjacentHTML('afterbegin', SW.art.defs + SW.art2.defs);
+var css = document.createElement('style');
+css.textContent = '.fac2.ghost * { fill: none !important; stroke: rgba(225,238,255,.55) !important; stroke-width: .8 !important; stroke-dasharray: 3 2.5; filter: none !important; }';
+document.head.appendChild(css);
+var names = ['Not started', 'Engines', 'Fuel Tank', 'Guidance', 'Capsule'];
+document.getElementById('rockets').innerHTML = [0, 1, 2, 3, 4].map(function (b) {
+  return '<div class="rk"><svg width="78" height="300" viewBox="-12 -6 74 216" style="height:250px;width:66px">' + SW.art2.rocket(0, 0, b, { vapor: b === 4 }) + '</svg><div class="cap"><b>' + b + ' / 4</b>' + names[b] + '</div></div>';
+}).join('');
+var F = [['bolt', 'Bolt Press', 72, 62], ['wire', 'Wire Mill', 56, 80], ['fuel', 'Fuel Refinery', 58, 104], ['hull', 'Hull Foundry', 66, 96], ['engine', 'Engine Works', 76, 56], ['avionics', 'Avionics Lab', 42, 124], ['kiln', 'Heat Shield Kiln', 54, 58]];
+document.getElementById('facs').innerHTML = F.map(function (x, i) {
+  var w = x[2] + 16, h = Math.max(x[3] + 30, 60);
+  var lit = i !== 6;
+  return '<div class="fc"><svg viewBox="-8 ' + (110 - h) + ' ' + w + ' ' + h + '" preserveAspectRatio="xMidYMax meet">' +
+    '<rect x="-8" y="110" width="' + w + '" height="6" fill="#0d1a30"/>' + SW.art2.factory(x[0], 0, 110, lit) + '</svg><div class="cap"><b>' + x[1] + '</b>' + (lit ? 'Owned · lit' : 'Not built yet') + '</div></div>';
+}).join('') + '<div class="fc"><svg viewBox="296 120 50 240" preserveAspectRatio="xMidYMax meet">' + SW.art2.gantry(306, 150, 356, 3) + '</svg><div class="cap"><b>Launch Tower</b>Arms reach built sections</div></div>';
+var I = [['bolt', 'Bolt', .7], ['wire', 'Wire', .35], ['fuel', 'Fuel', .82, 1], ['hull', 'Hull', .55], ['engine', 'Engine', .2], ['chip', 'Avionics', .6], ['kiln', 'Kiln', .4], ['tower', 'Tower', .9]];
+document.getElementById('icons').innerHTML = I.map(function (x) {
+  var c = 2 * Math.PI * 32;
+  return '<div class="ic" style="width:25%"><div class="rt' + (x[3] ? ' best' : '') + '"><svg class="rg" width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="32" fill="none" stroke="rgba(170,200,240,.14)" stroke-width="4"/>' +
+    '<circle cx="36" cy="36" r="32" fill="none" stroke="' + (x[3] ? '#ff8a3d' : '#8fc1f5') + '" stroke-width="4" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + (c * (1 - x[2])).toFixed(1) + '" transform="rotate(-90 36 36)"/></svg>' +
+    '<div class="tile">' + SW.art2.icon(x[0], 32) + '</div></div><div class="cap">' + x[1] + '</div></div>';
+}).join('');
+</script>
+</body></html>
