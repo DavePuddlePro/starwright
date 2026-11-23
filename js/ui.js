@@ -555,10 +555,12 @@
     document.body.appendChild(p);
     var cs = getComputedStyle(p), t = cs.paddingTop, b = cs.paddingBottom;
     p.remove();
-    var app = $('app').getBoundingClientRect();
-    return 'Screen ' + screen.width + '×' + screen.height + ' · window ' + innerWidth + '×' + innerHeight +
-      ' · app ' + Math.round(app.top) + '–' + Math.round(app.bottom) + ' · safe top ' + t + ', bottom ' + b +
-      ' · ' + (document.documentElement.classList.contains('standalone') ? 'home-screen app' : 'browser');
+    var app = $('app').getBoundingClientRect(), nav = $('nav').getBoundingClientRect(), de = document.documentElement;
+    var vv = window.visualViewport ? Math.round(visualViewport.height) : '-';
+    return 'Build ' + C().version + ' · screen ' + screen.width + '×' + screen.height + ' · window ' + innerWidth + '×' + innerHeight +
+      ' · visual ' + vv + ' · html ' + de.clientHeight + '/' + de.scrollHeight + ' · body ' + document.body.clientHeight +
+      ' · app ' + Math.round(app.top) + '–' + Math.round(app.bottom) + ' · tabs bottom ' + Math.round(nav.bottom) +
+      ' · safe top ' + t + ', bottom ' + b + ' · ' + (de.classList.contains('standalone') ? 'home-screen app' : 'browser');
   }
   function devHtml() {
     var d = G.s.dev;

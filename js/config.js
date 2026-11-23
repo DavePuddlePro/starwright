@@ -7,7 +7,7 @@
   var SW = root.SW = root.SW || {};
 
   SW.CONFIG = {
-    version: '0.1.0',
+    version: '0.7.6',
 
     // Set to false for the store build. When false, the dev menu can never be opened.
     devAllowed: true,
