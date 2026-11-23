@@ -41,6 +41,12 @@ button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .ic { width: 16px; height: 16px; flex: none; }
 
 #app { position: absolute; top: 0; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; overflow: hidden; background: var(--bg); }
+/* As a home-screen app, iPhone reports a shorter "safe" height for fixed/percentage layouts.
+   Size everything to the full screen height instead, so the game reaches the very bottom edge. */
+@media (display-mode: standalone) {
+  html, body, #app { bottom: auto; height: 100vh; }
+}
+html.standalone, html.standalone body, html.standalone #app { bottom: auto; height: 100vh; }
 
 /* ---------- The world (dusk yard) ---------- */
 .world { position: absolute; left: 0; right: 0; top: 0; height: calc(var(--world-h) + var(--safe-t)); overflow: hidden; }
