@@ -548,10 +548,23 @@
     return '<div class="card row-card"><div class="txt"><span class="t">' + title + '</span><span class="d">' + desc + '</span></div>' +
       '<button class="toggle' + (G.s.settings[key] ? ' on' : '') + '" data-set="' + key + '" aria-pressed="' + !!G.s.settings[key] + '" aria-label="' + title + '"></button></div>';
   }
+  // Screen measurements for diagnosing layout on real phones (shown in the dev menu).
+  function screenInfo() {
+    var p = document.createElement('div');
+    p.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)';
+    document.body.appendChild(p);
+    var cs = getComputedStyle(p), t = cs.paddingTop, b = cs.paddingBottom;
+    p.remove();
+    var app = $('app').getBoundingClientRect();
+    return 'Screen ' + screen.width + '×' + screen.height + ' · window ' + innerWidth + '×' + innerHeight +
+      ' · app ' + Math.round(app.top) + '–' + Math.round(app.bottom) + ' · safe top ' + t + ', bottom ' + b +
+      ' · ' + (document.documentElement.classList.contains('standalone') ? 'home-screen app' : 'browser');
+  }
   function devHtml() {
     var d = G.s.dev;
     function b(id, label) { return '<button class="btn ok plain" data-dev="' + id + '">' + label + '</button>'; }
     return '<div class="panel-head"><h2 style="color:var(--orange)">Dev menu</h2><span>remove before publishing</span></div>' +
+      '<p class="note" style="font-variant-numeric:tabular-nums">' + screenInfo() + '</p>' +
       '<div class="card" style="padding:12px;display:flex;flex-wrap:wrap;gap:8px">' +
       b('hour', '+1 h income') + b('x100', 'Credits ×100') + b('away', 'Away 1 h') + b('away8', 'Away 8 h') +
       b('od', '+1 h Overdrive') + b('payload', '+10 t payload') + b('rocket', 'Finish rocket') +

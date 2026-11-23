@@ -43,12 +43,17 @@ button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 #app { position: absolute; top: 0; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; overflow: hidden; background: var(--bg); }
 /* As a home-screen app, iPhone reports a shorter "safe" height for fixed/percentage layouts.
    Size everything to the full screen height instead, so the game reaches the very bottom edge. */
-/* Home-screen app: iPhone reports a height that leaves out the home-bar strip, so a script
-   measures the real screen height into --app-h and everything is sized to that. */
+/* Home-screen app on iOS 26 (WebKit bug 301108): with viewport-fit=cover and a translucent status bar,
+   iOS shortens the screen area by the status-bar height while the page is shorter than the screen.
+   Making the page itself at least screen-tall gives the full screen back. (Fix from frappe-ui #1284.) */
 @media (display-mode: standalone) {
-  html, body, #app { bottom: auto; height: var(--app-h, 100vh); }
+  html { position: relative; top: auto; right: auto; bottom: auto; left: auto; min-height: min(100lvh, calc(100% + env(safe-area-inset-top))); }
 }
-html.standalone, html.standalone body, html.standalone #app { bottom: auto; height: var(--app-h, 100vh); }
+html.standalone { position: relative; top: auto; right: auto; bottom: auto; left: auto; min-height: min(100lvh, calc(100% + env(safe-area-inset-top))); }
+/* A solid strip in the sky's top colour behind the status bar: iOS 26 uses this colour there instead of
+   blurring whatever is underneath. It is only as tall as the status bar, so it shows nowhere else. */
+.statusband { position: fixed; z-index: 6; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: #060c1c; pointer-events: none; }
+.statusband::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 22px; background: linear-gradient(#060c1c, rgba(6,12,28,0)); }
 
 /* ---------- The world (dusk yard) ---------- */
 .world { position: absolute; left: 0; right: 0; top: 0; height: calc(var(--world-h) + var(--safe-t)); overflow: hidden; }
